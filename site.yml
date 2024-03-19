@@ -3,24 +3,28 @@
   hosts: all
   become: yes
   tasks:
+
     - name: install tcpflow
       apt:
         name: tcpflow
         state: present
+
 - name: getting PCAP files from the CN
-  hosts: cn
+  hosts: remote_servers
   tasks:
+
     - name: fetch PCAP from CN
       fetch:
-        src: /home/altro/Desktop/collectPCAPS.pcap
-        dest: /home/altero/altero_hoa8.1
+        src: /home/altero/capture.pcap
+        dest: /home/altero/altero_hoa8.1/
         flat: yes
 
 - hosts: localhost
   connection: local
   gather_facts: false
   tasks:
+
     - name: extraction of executed file
-      command: "tcpflow -r /home/altero/altero_hoa8.1/collectPCAPS.pcap -o /home/altero/altero_hoa8.1
+      command: "tcpflow -r /home/altero/altero_hoa8.1/capture.pcap -o /home/altero/altero_hoa8.1/log"
       args:
         creates: /home/altero/altero_hoa8.1/executable.exe
